@@ -1,4 +1,4 @@
-"WES"	"VCF_File"	"VCF_Kit"
+"WES"	"VCF_File"	"VCF_Exome_Kit"
 "SL375981"	"/share/proj_io_rig_nova_grant/Harmonized_Softlinks/work/Alyssa_Work/WES/Somatic_VCF_Filtered/TSL375981_st_t_NSL377208_st_g.AF04_F1R21_F2R11_5reads.vcf.gz"	"IDT"
 "A30605"	"/share/proj_io_rig_nova_grant/Harmonized_Softlinks/work/Alyssa_Work/WES/Somatic_VCF_Filtered/TA30605_st_t_NA30606_st_g.AF04_F1R21_F2R11_5reads.vcf.gz"	"IDT"
 "A64929"	"/share/proj_io_rig_nova_grant/Harmonized_Softlinks/work/Alyssa_Work/WES/Somatic_VCF_Filtered/TA64929_st_t_NA65010_st_g.AF04_F1R21_F2R11_5reads.vcf.gz"	"IDT"
