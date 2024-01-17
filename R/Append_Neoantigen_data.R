@@ -22,20 +22,24 @@ empty <- mcmapply(vcf_files, function(file) {
   
   AvatarKey <- strsplit(basename(file),"_")[[1]][4]
   
+  # Check f AvatarKey was ran throuhg neoantigen pipeline
   if (any(grepl(AvatarKey,neoant_folders[,1]))) {
     print(paste0("Merging ",j,": ",AvatarKey))
     
     vcf <- as.data.frame(suppressWarnings(read_delim(file, delim = '\t', col_names = T, show_col_types = FALSE)))
     
+    # Create dna_key column from mutation information for merge
     vcf$chr <- apply(vcf[,"Mutation",drop = F],1,function(x){strsplit(x,"[[:punct:]]")[[1]][2]})
     vcf$pos <- apply(vcf[,"Mutation",drop = F],1,function(x){strsplit(x,"[[:punct:]]")[[1]][3]})
     vcf$pos <- sub("[A-Za-z]*$","",vcf$pos)
     vcf$dna_key <- paste(vcf$chr,vcf$pos,vcf$REF,vcf$ALT,sep = "_")
     vcf <- vcf[,which(!colnames(vcf) %in% c("chr","pos"))]
     
+    # Get neoantigen folders
     folders <- grep(AvatarKey,neoant_folders[,1],value = T)
     
     for (folder in folders) {
+      # Get folder information and read through required files
       RNASeq <- strsplit(basename(folder),"_")[[1]][2]
       WES <- strsplit(basename(folder),"_")[[1]][3]
       pm <- strsplit(basename(folder),"_")[[1]][4]
@@ -53,6 +57,7 @@ empty <- mcmapply(vcf_files, function(file) {
       hla2 <- as.data.frame(suppressWarnings(read_delim(hla2_file, delim = '\t', col_names = F, show_col_types = FALSE)))
       hla2 <- paste(hla2[,1],collapse = ",")
       
+      # Combine HLA allele and var IC50 information based on same mutation
       mhc1 <- mhc1 %>%
         group_by(dna_key) %>%
         mutate(HLA_allele = paste(HLA_allele,collapse = ","),
@@ -74,6 +79,7 @@ empty <- mcmapply(vcf_files, function(file) {
                                     paste(AvatarKey,pm,WES,"MHC2_Var_IC50",sep = "_"),
                                     paste(AvatarKey,pm,WES,"MHC2_Hit",sep = "_"))
       
+      # Merge data
       vcf <- merge(vcf,mhc1,all = T)
       vcf <- merge(vcf,mhc2,all = T)
       vcf[,paste(AvatarKey,pm,WES,"HLAI",sep = "_")] <- hla1
@@ -81,6 +87,7 @@ empty <- mcmapply(vcf_files, function(file) {
       
     }
     
+    # Write data
     write.table(vcf,paste0(Output_Folder,"Orien_IO_Rig_",AvatarKey,"_VAF_Neoantigen_Summary.txt"), sep = '\t', row.names = F)
   }
   
