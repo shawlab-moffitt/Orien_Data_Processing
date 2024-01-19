@@ -7,13 +7,13 @@ library(dplyr)
 
 VAF_Summary_Files_Dir <- "M:\\dept\\Dept_BBSR\\Projects\\Shaw_Timothy\\ORIEN_Diagnosis_Metastatic_Pairs\\Orien_IO_Rig_Neoantigen_Pipeline\\VAF_Neoantigen_Patient_Summaries_v3\\"
 
-Files_Of_Interest_Pattern <- "MHC1hits_Neoantigen_Summary.txt"
+Files_Of_Interest_Pattern <- "_MHC1hits_Neoantigen_Summary.txt"
 
 Aneuploidy_File <- "J:\\Proj_IO_RIG_NOVA_Grant\\Harmonized_Softlinks\\work\\Alyssa_Work\\Clinical\\Orien_IO_Rig_somatic_CNV_aneuploidy_Data_v3.txt"
 
 VCF_Exome_Kit_File <- "~/R/Projects/Orien_Data_Processing/Data/Orien_VCF_Kit_Type.txt"
 
-Output_File_Name <- "J:\\Proj_IO_RIG_NOVA_Grant\\Harmonized_Softlinks\\work\\Alyssa_Work\\WES\\Orien_PairedSample_VAF_Summary_MHC1hit_01192024.txt"
+Output_File_Name <- "J:\\Proj_IO_RIG_NOVA_Grant\\Harmonized_Softlinks\\work\\Alyssa_Work\\WES\\Orien_PairedSample_VAF_Summary_MHC1hit_01192024_v2.txt"
 
 
 VAF_files <- list.files(VAF_Summary_Files_Dir,full.names = T, pattern = Files_Of_Interest_Pattern)
@@ -80,7 +80,7 @@ for (file in VAF_files) {
   
   ## Get file info
   AvatarKey <- strsplit(basename(file),"_")[[1]][4]
-  df <- as.data.frame(read_delim(file, delim = '\t', col_names = T))
+  df <- as.data.frame(read_delim(file, delim = '\t', col_names = T, show_col_types = FALSE))
   df2 <- df
   col_comb <- as.data.frame(combn(grep("_VAF$",colnames(df2),value = T), 2))
   for (pair in seq_along(col_comb)) {
@@ -235,9 +235,10 @@ for (file in VAF_files) {
         df_data <- c(df_data,pri_aneu,met_aneu,Met_minus_Prim_Aneu,pri_HRD,met_HRD,Met_minus_Prim_HRD)
       }
       
+      write(df_data,file = Output_File_Name, append = T, sep = '\t', ncolumns = 114)
+      
     } 
     
-    write(df_data,file = Output_File_Name, append = T, sep = '\t', ncolumns = 114)
     
   }
   
