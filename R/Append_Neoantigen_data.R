@@ -1,4 +1,5 @@
-
+# Append Neoantigen Pipeline Results to VAF patient data
+# Author: Alyssa Obermayer
 
 library(readr)
 library(dplyr)
@@ -23,7 +24,7 @@ empty <- mclapply(vcf_files, function(file) {
   
   AvatarKey <- strsplit(basename(file),"_")[[1]][4]
   
-  # Check f AvatarKey was ran throuhg neoantigen pipeline
+  # Check f AvatarKey was ran through neoantigen pipeline
   if (any(grepl(AvatarKey,neoant_folders[,1]))) {
     print(paste0("Merging: ",AvatarKey))
     
