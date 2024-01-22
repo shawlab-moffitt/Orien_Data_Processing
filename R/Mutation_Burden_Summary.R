@@ -34,9 +34,10 @@ write(header,file = Output_File, append = T, sep = '\t', ncolumns = 24)
 for (file in VCF_Anno_files) {
   
   VCF_Sample_Name <- basename(file)
+  print(paste("Processing:",VCF_Sample_Name))
   WES <- gsub("^T","",gsub("_..*","",VCF_Sample_Name))
   #WES <- gsub("Patient","",strsplit(VCF_Sample_Name,"_")[[1]][6])
-  df <- as.data.frame(read_delim(file, delim = '\t', col_names = T))
+  df <- as.data.frame(read_delim(file, delim = '\t', col_names = T, show_col_types = FALSE))
   VCF_Exome_Kit <- VCF_Exome_Kit_df[which(VCF_Exome_Kit_df$WES == WES),"VCF_Exome_Kit"]
   
   inFrame_rows <- which(df$Variant_Frame_Classification=="In-Frame Event")
